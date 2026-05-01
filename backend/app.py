@@ -172,19 +172,22 @@ def api_reset():
 # =====================================================
 # SERVE FRONTEND
 # =====================================================
+import os
+
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend')
 
 @app.route('/')
 def index():
     """Serve index.html"""
     from flask import send_from_directory
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(FRONTEND_DIR, 'index.html')
 
 
 @app.route('/<path:filename>')
 def serve_static(filename):
     """Serve CSS, JS, dan file statis lainnya"""
     from flask import send_from_directory
-    return send_from_directory('.', filename)
+    return send_from_directory(FRONTEND_DIR, filename)
 
 
 if __name__ == '__main__':
