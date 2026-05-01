@@ -1,40 +1,15 @@
 // =====================================================
-// CLASS STACK — Implementasi struktur data LIFO
+// BACKEND API CONFIGURATION
 // =====================================================
-class Stack {
-  constructor() {
-    this.items = [];
-  }
+const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
-  // Tambah elemen ke atas stack
-  push(element) {
-    this.items.push(element);
-  }
-
-  // Hapus & kembalikan elemen paling atas
-  pop() {
-    if (this.isEmpty()) return null;
-    return this.items.pop();
-  }
-
-  // Lihat elemen paling atas tanpa menghapus
-  peek() {
-    if (this.isEmpty()) return null;
-    return this.items[this.items.length - 1];
-  }
-
-  isEmpty() {
-    return this.items.length === 0;
-  }
-
-  size() {
-    return this.items.length;
-  }
-
-  clear() {
-    this.items = [];
-  }
-}
+// =====================================================
+// STATE APLIKASI (UI ONLY)
+// =====================================================
+let stackData   = [];  // Disimpan dari API response
+let ops         = 0;   // Operasi counter dari API
+let colorIdx    = 0;
+let colorMap    = []; // menyimpan index warna tiap elemen
 
 // =====================================================
 // KONFIGURASI WARNA ELEMEN STACK
@@ -42,14 +17,6 @@ class Stack {
 const COLORS        = ['#000000', '#000000', '#000000', '#000000', '#000000'];
 const TEXT_COLORS   = ['#e6edf3', '#e6edf3', '#e6edf3', '#e6edf3', '#e6edf3'];
 const BORDER_COLORS = ['#58a6ff', '#58a6ff', '#58a6ff', '#58a6ff', '#58a6ff'];
-
-// =====================================================
-// STATE APLIKASI
-// =====================================================
-const stack    = new Stack();
-let ops        = 0;
-let colorIdx   = 0;
-let colorMap   = []; // menyimpan index warna tiap elemen
 
 // =====================================================
 // UTILITAS
@@ -82,7 +49,7 @@ function addLog(type, msg) {
 }
 
 function updateStats() {
-  document.getElementById('sizeVal').textContent = stack.size();
+  document.getElementById('sizeVal').textContent = stackData.length;
   document.getElementById('opsVal').textContent  = ops;
 }
 
@@ -98,15 +65,17 @@ function renderStack() {
 
   updateStats();
 
-  if (stack.isEmpty()) {
+  if (stackData.length === 0) {
     empty.style.display = 'block';
     return;
   }
 
   empty.style.display = 'none';
 
-  stack.items.forEach((val, i) => {
-    const isTop = i === stack.items.length - 1;
+  // Loop dari belakang ke depan agar visual order benar (top index = paling atas)
+  for (let i = stackData.length - 1; i >= 0; i--) {
+    const val = stackData[i];
+    const isTop = i === stackData.length - 1;
     const ci    = colorMap[i] % COLORS.length;
 
     const div = document.createElement('div');
@@ -121,15 +90,15 @@ function renderStack() {
       ? `0 0 12px ${BORDER_COLORS[ci]}33`
       : 'none';
 
-    // Sisipkan dari atas agar urutan kolom terbalik (index 0 = bawah)
-    vis.insertBefore(div, vis.firstChild);
-  });
+    // Append dari belakang ke depan (urutan terbalik akan menghasilkan order yang benar)
+    vis.appendChild(div);
+  }
 }
 
 // =====================================================
-// OPERASI STACK
+// OPERASI STACK (ASYNC - PANGGIL API)
 // =====================================================
-function doPush() {
+async function doPush() {
   const inp = document.getElementById('inputVal');
   const val = inp.value.trim();
 
@@ -138,64 +107,156 @@ function doPush() {
     return;
   }
 
-  const ci = colorIdx % COLORS.length;
-  colorMap.push(ci);
-  stack.push(val);
-  colorIdx++;
-  ops++;
+  try {
+    const response = await fetch(`${API_BASE_URL}/stack/push`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: val })
+    });
 
-  inp.value = '';
-  renderStack();
-  setInfo(`Nilai "${val}" berhasil ditambahkan ke dalam stack.`, 'info');
-  addLog('push', `push("${val}")`);
-}
+    const data = await response.json();
 
-function doPop() {
-  if (stack.isEmpty()) {
-    setInfo('Stack kosong! Tidak ada yang bisa di-pop.', 'error');
-    addLog('pop', 'pop() → error: kosong');
-    return;
+    if (!response.ok) {
+      setInfo(data.error || 'Error saat push', 'error');
+      return;
+    }
+
+    // Update state dari API response
+    stackData = data.stack;
+    ops = data.operations;
+    
+    // Add warna untuk elemen baru
+    const ci = colorIdx % COLORS.length;
+    colorMap.push(ci);
+    colorIdx++;
+
+    inp.value = '';
+    renderStack();
+    setInfo(`Nilai "${val}" berhasil ditambahkan ke dalam stack.`, 'info');
+    addLog('push', `push("${val}")`);
+  } catch (error) {
+    setInfo(`Error: ${error.message}`, 'error');
   }
-
-  const val = stack.pop();
-  colorMap.pop();
-  ops++;
-
-  renderStack();
-  setInfo(`Pop berhasil! Nilai "${val}" diambil dan dihapus dari stack.`, '');
-  addLog('pop', `pop("${val}")`);
 }
 
-function doPeek() {
-  if (stack.isEmpty()) {
-    setInfo('Stack kosong! Tidak ada elemen di atas.', 'error');
-    addLog('peek', 'peek() → error: kosong');
-    return;
+async function doPop() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/stack/pop`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setInfo(data.error || 'Error saat pop', 'error');
+      addLog('pop', 'pop() → error: kosong');
+      return;
+    }
+
+    // Update state dari API response
+    stackData = data.stack;
+    ops = data.operations;
+    const val = data.popped_value;
+    
+    // Hapus warna dari elemen yang di-pop
+    colorMap.pop();
+
+    renderStack();
+    setInfo(`Pop berhasil! Nilai "${val}" diambil dan dihapus dari stack.`, '');
+    addLog('pop', `pop("${val}")`);
+  } catch (error) {
+    setInfo(`Error: ${error.message}`, 'error');
   }
-
-  const val = stack.peek();
-  ops++;
-
-  updateStats();
-  setInfo(`Peek: elemen di atas adalah "${val}" (tidak dihapus).`, 'info');
-  addLog('peek', `peek() → "${val}"`);
 }
 
-function doClear() {
-  stack.clear();
-  colorMap = [];
-  ops++;
+async function doPeek() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/stack/peek`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-  renderStack();
-  setInfo('Stack dikosongkan.', '');
-  addLog('pop', 'clear() → stack kosong');
+    const data = await response.json();
+
+    if (!response.ok) {
+      setInfo('Error saat peek', 'error');
+      return;
+    }
+
+    ops = data.operations;
+    updateStats();
+
+    if (data.peek_value === null) {
+      setInfo('Stack kosong! Tidak ada elemen di atas.', 'error');
+      addLog('peek', 'peek() → error: kosong');
+    } else {
+      setInfo(`Peek: elemen di atas adalah "${data.peek_value}" (tidak dihapus).`, 'info');
+      addLog('peek', `peek() → "${data.peek_value}"`);
+    }
+  } catch (error) {
+    setInfo(`Error: ${error.message}`, 'error');
+  }
+}
+
+async function doClear() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/stack/clear`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setInfo('Error saat clear', 'error');
+      return;
+    }
+
+    // Update state
+    stackData = data.stack;
+    ops = data.operations;
+    colorMap = [];
+    colorIdx = 0;
+
+    renderStack();
+    setInfo('Stack dikosongkan.', '');
+    addLog('clear', 'clear() → stack kosong');
+  } catch (error) {
+    setInfo(`Error: ${error.message}`, 'error');
+  }
 }
 
 // =====================================================
-// EVENT LISTENER
+// EVENT LISTENER & INITIALIZATION
 // =====================================================
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('inputVal').addEventListener('keydown', e => {
     if (e.key === 'Enter') doPush();
   });
+  
+  // Load initial state dari backend
+  loadStackStatus();
 });
+
+async function loadStackStatus() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/stack/status`);
+    const data = await response.json();
+    
+    stackData = data.stack;
+    ops = data.operations;
+    
+    // Rekonstruksi colorMap berdasarkan jumlah elemen
+    colorMap = [];
+    for (let i = 0; i < stackData.length; i++) {
+      colorMap.push(i % COLORS.length);
+    }
+    colorIdx = stackData.length;
+    
+    renderStack();
+  } catch (error) {
+    console.error('Backend connection error:', error);
+    setInfo('⚠️ Backend tidak terhubung. Pastikan Flask server berjalan di http://127.0.0.1:5000', 'error');
+  }
+}
