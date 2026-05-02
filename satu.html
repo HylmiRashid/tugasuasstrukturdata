@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name = "viewport" content= "width = device-width, initial-scale = 1.0">
+        <title>UAS (Stack)</title>
+        <link rel = "stylesheet" href = "dua.css">
+    </head>
+    <body>
+        <header>
+            <div class = "pojok_atas">Struktur Data<span>Pradita</span></div>
+        </header>
+
+        <main>
+            <section class = "stak">
+                <div class = "header_kotak">
+                    <span class = "judul_kotak">Implementasi Stack</span>
+                    <span class = "kata_kecil">LIFO</span>
+                </div>
+                <div class = "area_kotak">
+                    <div class = "kotak">
+                        <div class = "label" id = "labelnya"></div>
+                        <div class = "kolom_stack" id = "kolomnya"></div>
+                        <div class = "penanda_top" id = "topnya"></div>
+                    </div>
+                </div>
+                <div class = "keterangan">
+                    <span>Ukuran : <b id = "ukuran">0</b></span>
+                    <span>Operasi : <b id = "operasi">0</b></span>
+                </div>
+            </section>
+            <aside class = "area_kanan">
+                <div class = "header_kanan">
+                    <div class = "judul_kanan">STACK</div>
+                    <div class = "bawah_judul_kanan">Kelompok 2</div>
+                </div>
+                <div class = "kotak_operasi">Operasi
+                    <div class = "kotak_input">
+                        <input id = "inputnilai" class = "input" type = "text" placeholder = "masukan nilai kamu"> 
+                    </div>
+                    <div class = "area_tombol">
+                        <button class = "tombol_push" onclick = "opPush()">Push</button>
+                        <button class = "tombol_pop" onclick= "opPop()">Pop</button>
+                    <button class = "tombol_clear" onclick = "opClear()">Clear</button>
+                    <button class = "tombol_peek" onclick = "opPeek()">Peek</button>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </body>
+</html>
