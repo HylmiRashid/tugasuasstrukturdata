@@ -1,0 +1,63 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <title>UAS (Stack)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="pojok_atas">Struktur Data<span> Pradita</span></div>
+    </header>
+
+    <main>
+        <section class="stack">
+            <div class="header_kotak">
+                <span class="judul_kotak">Implementasi Stack</span>
+                <span class="kata_kecil">LIFO</span>
+            </div>
+            <div class="area_kotak">
+                <div class="kotak">
+                    <div class="label" id="labelnya"></div>
+                    <div class="kolom_stack" id="kolomnya"></div>
+                    <div class="penanda_top" id="topnya"></div>
+                </div>
+            </div>
+            <div class="keterangan">
+                <span>Ukuran : <b id="ukuran">0</b></span>
+                <span>Operasi : <b id="operasi">0</b></span>
+            </div>
+        </section>
+        <aside class="area_kanan">
+            <div class="header_kanan">
+                <div class="judul_kanan">STACK</div>
+                <div class="bawah_judul_kanan">Kelompok 2</div>
+            </div>
+            <div class="kotak_operasi">Operasi
+                <div class="kotak_input">
+                    <input id="inputnilai" class="input" type="text" placeholder="masukan nilai kamu">
+                </div>
+                <div class="area_tombol">
+                    <button class="tombol_push" onclick="pushAction()">Push</button>
+                    <button class="tombol_pop" onclick="popAction()">Pop</button>
+                    <button class="tombol_clear" onclick="clearAction()">Clear</button>
+                    <button class="tombol_peek" onclick="peekAction()">Peek</button>
+                </div>
+            </div>
+            <div class="notifikasi" id="notif"></div>
+            <div class="history" id="history">
+                <div class="header_history">
+                    <span class="judul_history">History Operasi</span>
+                    <button class="tmbl_copy_history" onclick="copyLog()" title="Copy History">📋</button>
+                </div>
+                <div class="area_history" id="areahistory"></div>
+            </div>
+        </aside>
+    </main>
+    <script src="stack.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
