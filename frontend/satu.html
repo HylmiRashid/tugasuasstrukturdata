@@ -7,11 +7,11 @@
     </head>
     <body>
         <header>
-            <div class = "pojok_atas">Struktur Data<span>Pradita</span></div>
+            <div class = "pojok_atas">Struktur Data<span> Pradita</span></div>
         </header>
 
         <main>
-            <section class = "stak">
+            <section class = "stack">
                 <div class = "header_kotak">
                     <span class = "judul_kotak">Implementasi Stack</span>
                     <span class = "kata_kecil">LIFO</span>
@@ -40,11 +40,20 @@
                     <div class = "area_tombol">
                         <button class = "tombol_push" onclick = "opPush()">Push</button>
                         <button class = "tombol_pop" onclick= "opPop()">Pop</button>
-                    <button class = "tombol_clear" onclick = "opClear()">Clear</button>
-                    <button class = "tombol_peek" onclick = "opPeek()">Peek</button>
+                        <button class = "tombol_clear" onclick = "opClear()">Clear</button>
+                        <button class = "tombol_peek" onclick = "opPeek()">Peek</button>
                     </div>
+                </div>
+                <div class = "notifikasi" id = "notif"></div>
+                <div class = "history" id = "history">
+                    <div class = "header_history">
+                        <span class = "judul_history">History Operasi</span>
+                        <button class = "tmbl_copy_history" onclick = "copyLog()" title = "Copy History"></button>
+                    </div>
+                    <div class = "area_history" id = "areahistory"></div>
                 </div>
             </aside>
         </main>
+        <script src = "dua.js"></script>
     </body>
 </html>
