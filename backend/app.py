@@ -178,9 +178,9 @@ FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend')
 
 @app.route('/')
 def index():
-    """Serve index.html"""
+    """Serve satu.html"""
     from flask import send_from_directory
-    return send_from_directory(FRONTEND_DIR, 'index.html')
+    return send_from_directory(FRONTEND_DIR, 'satu.html')
 
 
 @app.route('/<path:filename>')
