@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Trebuchet MS', sans-serif;
-    background: #1a1a1a;
+    background: white;
     color: #000000;
     overflow-x: hidden;
 }
@@ -15,7 +15,7 @@ body {
 header {
     background: #346739;
     padding: 15px 20px;
-    border-bottom: 2px solid #2a5230;
+    border-bottom: 2px solid #2a5320;
     box-shadow: 0 0 10px rgba(52, 103, 57, 0.3);
 }
 
