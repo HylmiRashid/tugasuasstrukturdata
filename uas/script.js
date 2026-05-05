@@ -129,16 +129,6 @@ function clearAction() {
     showNotif("Stack dikosongkan", "success");
 }
 
-function copyLog() {
-    if (logList.length === 0) {
-        showNotif("Belum ada history", "error");
-        return;
-    }
-    navigator.clipboard.writeText(logList.join("\n"))
-        .then(() => showNotif("Berhasil dicopy!", "success"))
-        .catch(() => showNotif("Gagal copy!", "error"));
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     refreshDisplay();
     document.getElementById("inputnilai").addEventListener("keypress", e => {
