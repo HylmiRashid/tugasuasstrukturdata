@@ -29,7 +29,11 @@ Tidak ada dependencies eksternal yang diinstall pada website ini. Website ini ad
 1. **Clone repository** (atau download file)
    ```bash
    git clone https://github.com/HylmiRashid/tugasuasstrukturdata.git
+<<<<<<< HEAD
    cd stack_visualization
+=======
+   cd "Stack Data Structure Implementation"
+>>>>>>> d0bef48b8a6f8e881bc1603593b60e871581ba3a
    ```
 
 2. **Buka file HTML di browser**
@@ -50,7 +54,18 @@ Tidak ada dependencies eksternal yang diinstall pada website ini. Website ini ad
    - Lihat visualisasi dan history operasi di sebelah kanan
 
 
+<<<<<<< HEAD
 ## Fitur Aplikasi
+=======
+```
+Stack Data Structure Implementation/
+├── index.html       # File HTML utama (UI)
+├── style.css        # Styling dan layout
+├── stack.js         # Class Stack (implementasi struktur data)
+├── script.js        # Logika aplikasi dan interaksi UI
+└── README.md        # File dokumentasi
+```
+>>>>>>> d0bef48b8a6f8e881bc1603593b60e871581ba3a
 
 **Visualisasi Stack** - Animasi pergerakan elemen
 **Operasi LIFO** - Push, Pop, Peek, Clear
