@@ -12,7 +12,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 function refreshDisplay() {
-    document.getElementById("ukuran").textContent = stack.size();
+    document.getElementById("ukuran").textContent = stack.size(); 
     document.getElementById("operasi").textContent = totalOperations;
 
     const column = document.getElementById("kolomnya");
@@ -39,20 +39,16 @@ function refreshDisplay() {
 }
 
 function showNotif(message, type = "info") {
-    // 1. Ambil element notif dari HTML
     const notif = document.getElementById("notif");
-    notif.textContent = message;  // Set teks pesan
+    notif.textContent = message;
 
-    // 2. Tentukan warna berdasarkan type
-    const color = type === "success" ? "#00F000"      // 🟢 Hijau (success)
-                : type === "error"   ? "#ff4444"      // 🔴 Merah (error)
-                :                      "#79AE6F";     // 🟡 Kuning (info)
+    const color = type === "success" ? "#00F000"
+                : type === "error"   ? "#ff4444"
+                :                      "#79AE6F";
 
-    // 3. Apply warna ke notif
     notif.style.borderColor = color;
     notif.style.color = color;
 
-    // 4. Auto-clear setelah 3 detik
     setTimeout(() => {
         notif.textContent = "";
         notif.style.borderColor = "#79AE6F";
@@ -80,11 +76,6 @@ function pushAction() {
     if (!value) {
         showNotif("Masukkan nilai dulu!", "error");
         input.focus();
-        return;
-    }
-
-    if (stack.isFull()) {
-        showNotif("Stack penuh!", "error");
         return;
     }
 
